@@ -34,20 +34,6 @@ class CharacterCmdSet(default_cmds.CharacterCmdSet):
         #
         # any commands you add below will overload the default ones.
         #
-        cmdLook = self.get('look')
-        aliases = []
-        aliases.extend(cmdLook.aliases)
-        aliases.extend(['betrachte', 'b'])
-        cmdLook.set_aliases(aliases)
-        self.add(cmdLook)
-
-        cmdGet = self.get('get')
-        aliases = []
-        aliases.extend(cmdGet.aliases)
-        aliases.extend(['nimm'])
-        cmdGet.set_aliases(aliases)
-        self.add(cmdGet)
-
 
 #class AccountCmdSet(default_cmds.AccountCmdSet):
 #    """

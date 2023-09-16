@@ -14,11 +14,7 @@ class CmdEcho(Command):
     def func(self):
         self.caller.msg(f"Echo: {self.args.strip()}")
 
-<<<<<<< HEAD
-class CmdSpielerBuch(Command):
-=======
 class CmdSpielerStatus(Command):
->>>>>>> ba99754 (initial commit)
     """
     Ein echo kommando
 
@@ -26,24 +22,12 @@ class CmdSpielerStatus(Command):
         echo <deine Eingabe>
 
     """
-<<<<<<< HEAD
-    key = "spielerbuch"
-    aliases = ["sp"]
-=======
     key = "spielerstatus"
     aliases = ["sp","status"]
->>>>>>> ba99754 (initial commit)
 
     def func(self):
         self.caller.msg("""
 +-----------------------------------------------------------------------------+
-<<<<<<< HEAD
-|Name: {name:20}                                                   |
-+-----------------------------------------------------------------------------+
-|  Staerke  :{sta:3d}           Intelligenz :{int:3d}          Weissheit :{wei:3d}           |
-|  Ausdauer :{ausd:3d}           Vitalitaet  :{vit:3d}          konsentrazion :{kons:3d}     |
-|
-=======
 |  Name: {name:60}         |
 +-----------------------------------------------------------------------------+
 |  Staerke      :{sta:3d}        Intelligenz :{int:3d}        Weissheit     :{wei:3d}        |
@@ -60,19 +44,12 @@ class CmdSpielerStatus(Command):
 |  Level :{lvl:3d}                Erfahrungspunkte: {ep:30d} |
 +-----------------------------------------------------------------------------+ 
                                                                    
->>>>>>> ba99754 (initial commit)
         """.format(sta=self.caller.staerke,
         int=self.caller.intelligenz, 
         wei=self.caller.weissheit,
         ausd=self.caller.ausdauer,
         vit=self.caller.vitalitaet,
         kons=self.caller.konsentrazion,
-<<<<<<< HEAD
-        name="name string"))
-
-
-
-=======
         schn=self.caller.schnelligkeit,
         aur=self.caller.aura,
         will=self.caller.willenskraft,
@@ -81,7 +58,6 @@ class CmdSpielerStatus(Command):
         rasse="Dunkelelf",   #self.caller.rasse,
         rang="spieleradmin",     #self.caller.rang,
         name=self.caller.name      ))
->>>>>>> ba99754 (initial commit)
 
 
 
@@ -131,9 +107,6 @@ class CmdNimm(Command):
             # calling at_get hook method
             obj.at_get(caller)
 
-<<<<<<< HEAD
-
-=======
 #-------------------------------------------------------------------------------------------
 class CmdHomeDeu(Command):
     """
@@ -734,15 +707,11 @@ class CmdEmoteDeu(Command):
             self.caller.location.msg_contents(text=(msg, {"type": "pose"}), from_obj=self.caller)
 
 #---------------------------------------------------------------------------------------------
->>>>>>> ba99754 (initial commit)
 class DeuCmdSet(CmdSet):
 
     def at_cmdset_creation(self):
         self.add(CmdEcho)
         self.add(CmdNimm)
-<<<<<<< HEAD
-        self.add(CmdSpielerBuch)
-=======
         self.add(CmdSpielerStatus)
         self.add(CmdEmoteDeu)
         self.add(Cmdfluestern)
@@ -752,4 +721,3 @@ class DeuCmdSet(CmdSet):
         self.add(CmdAusruestung)
         self.add(CmdNickDeu)
         self.add(CmdHomeDeu)
->>>>>>> ba99754 (initial commit)
