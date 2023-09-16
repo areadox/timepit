@@ -52,6 +52,9 @@ class Character(ObjectParent, DefaultCharacter):
     level = AttributeProperty(1, category='lvl')
     erfahrungspunke = AttributeProperty(0, category='lvl')
 
+    rasse = AttributeProperty("none", category='rasse')
+    rang = AttributeProperty("none", category='rang')
+
     lebenspunkte = AttributeProperty(50, category='werte')
     zauberpunke = AttributeProperty(30, category='werte')
     aktionspunke = AttributeProperty(30, category='werte')

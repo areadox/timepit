@@ -15,7 +15,8 @@ own cmdsets by inheriting from them or directly from `evennia.CmdSet`.
 """
 
 from evennia import default_cmds
-from evennia.contrib.rpg.character_creator.character_creator import ContribCmdCharCreate
+from character_creator.character_creator import *
+from evennia.utils import utils
 
 class CharacterCmdSet(default_cmds.CharacterCmdSet):
     """
@@ -41,10 +42,10 @@ class CharacterCmdSet(default_cmds.CharacterCmdSet):
 #    combined with the `CharacterCmdSet` when the Account puppets a
 #    Character. It holds game-account-specific commands, channel
 #    commands, etc.
-#    """
-#
+#   """
+
 #    key = "DefaultAccount"
-#
+
 #    def at_cmdset_creation(self):
 #        """
 #        Populates the cmdset
@@ -53,12 +54,15 @@ class CharacterCmdSet(default_cmds.CharacterCmdSet):
 #        #
 #        # any commands you add below will overload the default ones.
 #        #
-
+#
 class AccountCmdSet(default_cmds.AccountCmdSet):
 
     def at_cmdset_creation(self):
         super().at_cmdset_creation()
         self.add(ContribCmdCharCreate)
+        self.add(DeuCmdCharDelete)
+        self.add(DeuCmdIC)
+        self.add(CmdWer)
 
 class UnloggedinCmdSet(default_cmds.UnloggedinCmdSet):
     """

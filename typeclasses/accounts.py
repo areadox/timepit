@@ -24,7 +24,9 @@ several more options for customizing the Guest account system.
 
 from evennia.accounts.accounts import DefaultAccount, DefaultGuest
 
-from evennia.contrib.rpg.character_creator.character_creator import ContribChargenAccount
+from character_creator.character_creator import ContribChargenAccount
+
+
 
 class Account(ContribChargenAccount):
     # your Account class code

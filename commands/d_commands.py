@@ -1,5 +1,7 @@
 from commands.command import Command
 from evennia import CmdSet
+from evennia.utils import utils
+
 
 class CmdEcho(Command):
     """
@@ -26,6 +28,7 @@ class CmdSpielerStatus(Command):
     aliases = ["sp","status"]
 
     def func(self):
+
         self.caller.msg("""
 +-----------------------------------------------------------------------------+
 |  Name: {name:60}         |
@@ -55,8 +58,8 @@ class CmdSpielerStatus(Command):
         will=self.caller.willenskraft,
         ep=self.caller.erfahrungspunke,
         lvl=self.caller.level,
-        rasse="Dunkelelf",   #self.caller.rasse,
-        rang="spieleradmin",     #self.caller.rang,
+        rasse=self.caller.attributes.get("rasse",category='rasse'),
+        rang=self.caller.rang,	
         name=self.caller.name      ))
 
 

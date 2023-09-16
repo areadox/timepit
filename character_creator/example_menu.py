@@ -101,29 +101,22 @@ def menunode_welcome(caller):
 # e.g. wherever you have the classes actually defined, so later updates only happen in one place.
 _CLASS_INFO_DICT = {
     # The keys here are the different options you can choose, and the values are the info pages
-    "Mensch": dedent(
+    "warrior": dedent(
         """\
-        Ein Mensch.
+        Most warriors specialize in melee weapons, although ranged combat
+        is not unheard of.
+
+        Warriors like to compete by beating each other up for fun.
         """
     ),
-    "Duneklelf": dedent(
+    "mage": dedent(
         """\
-        Ein Dunkelelf
-        """
-    ),
-    "Elf": dedent(
-        """\
-        Ein Elf
-        """
-    ),
-    "Zwerg": dedent(
-        """\
-        Ein Zwerg
-        """
-    ),
-    "Exxe": dedent(
-        """\
-        Eine Exxe
+        Mages prefer less combative lines of work, such as showmanship or
+        selling enchanted charms. Those who choose to be a battle mage are
+        highly sought after by adventuring parties.
+
+        Mage schools, being led by the most academic-minded of mages, are
+        notorious for intellectual snobbery.
         """
     ),
 }
