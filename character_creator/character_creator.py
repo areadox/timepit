@@ -548,3 +548,50 @@ class CmdWer(MuxAccountCommand):
             "|wAccounts:|n\n%s\n%s unique account%s logged in."
             % (table, "One" if is_one else naccounts, "" if is_one else "s")
         )
+
+class CmdEnde(MuxAccountCommand):
+    """
+    quit the game
+
+    Usage:
+      ende
+
+    Switch:
+      all - disconnect all connected sessions
+
+    Gracefully disconnect your current session from the
+    game. Use the /all switch to disconnect from all sessions.
+    """
+
+    key = "ende"
+    switch_options = ("all",)
+    locks = "cmd:all()"
+
+    # this is used by the parent
+    account_caller = True
+
+    def func(self):
+        """hook function"""
+        account = self.account
+
+        if "all" in self.switches:
+            account.msg(
+                "|RQuitting|n all sessions. Hope to see you soon again.", session=self.session
+            )
+            reason = "quit/all"
+            for session in account.sessions.all():
+                account.disconnect_session_from_account(session, reason)
+        else:
+            nsess = len(account.sessions.all())
+            reason = "quit"
+            if nsess == 2:
+                account.msg("|RQuitting|n. One session is still connected.", session=self.session)
+            elif nsess > 2:
+                account.msg(
+                    "|RQuitting|n. %i sessions are still connected." % (nsess - 1),
+                    session=self.session,
+                )
+            else:
+                # we are quitting the last available session
+                account.msg("|RQuitting|n. Hope to see you again, soon.", session=self.session)
+            account.disconnect_session_from_account(self.session, reason)

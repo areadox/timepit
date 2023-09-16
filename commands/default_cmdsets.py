@@ -63,6 +63,7 @@ class AccountCmdSet(default_cmds.AccountCmdSet):
         self.add(DeuCmdCharDelete)
         self.add(DeuCmdIC)
         self.add(CmdWer)
+        self.add(CmdEnde)
 
 class UnloggedinCmdSet(default_cmds.UnloggedinCmdSet):
     """
