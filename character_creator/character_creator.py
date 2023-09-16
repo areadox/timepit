@@ -549,6 +549,8 @@ class CmdWer(MuxAccountCommand):
             % (table, "One" if is_one else naccounts, "" if is_one else "s")
         )
 
+
+
 class CmdEnde(MuxAccountCommand):
     """
     quit the game
