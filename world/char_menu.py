@@ -77,18 +77,16 @@ def menunode_welcome(caller):
     """Starting page."""
     text = dedent(
         """\
-        |wWelcome to Character Creation!|n
+        |wWillkommen zur Character erschaffung!|n
 
-        This is the starting node for all brand new characters. It's a good place to
-        remind players that they can exit the character creator and resume later,
-        especially if you're going to have a really long chargen process.
+        Hier wirst du durch die Charractererschaffung gefuehrt. Es ist aber auch gut
+        zu Wissen was dich erwartet. Schau dir bitte die Hilfeseiten der Homepage an.
 
-        A brief overview of the game could be a good idea here, too, or a link to your
-        game wiki if you have one.
+        Nun wir wunschen dir viel Erfolg und Spass in der Timepit.
     """
     )
-    help = "You can explain the commands for exiting and resuming more specifically here."
-    options = {"desc": "Let's begin!", "goto": "menunode_info_base"}
+    help = "Du wirst druch ein Menue geleitet."
+    options = {"desc": "Jetzt beginnen!", "goto": "menunode_info_base"}
     return (text, help), options
 
 
@@ -136,19 +134,18 @@ def menunode_info_base(caller):
 
     text = dedent(
         """\
-        |wInformational Pages|n
+        |wHier ist eine Uebersicht aller spielbaren Rassen.
 
-        Sometimes you'll want to let players read more about options before choosing
-        one of them. This is especially useful for big choices like race or class.
+        Waehle eine Rasse aus um mehr ueber diese zu erfahren.
     """
     )
-    help = "A link to your wiki for more information on classes could be useful here."
+    help = "Auf der Homepage findest du noch mehr Informationen."
     options = []
     # Build your options from your info dict so you don't need to update this to add new options
     for pclass in _CLASS_INFO_DICT.keys():
         options.append(
             {
-                "desc": f"Learn about the |c{pclass}|n class",
+                "desc": f"Lies mehr ueber |c{pclass}|n",
                 "goto": ("menunode_info_class", {"selected_class": pclass}),
             }
         )
@@ -164,7 +161,7 @@ def menunode_info_class(caller, raw_string, selected_class=None, **kwargs):
         # reset back to the previous step
         caller.new_char.db.chargen_step = "menunode_welcome"
         # print error to player and quit the menu
-        return "Something went wrong. Please try again."
+        return "UPS! etwas ging schief!"
 
     # Since you have all the info in a nice dict, you can just grab it to display here
     text = _CLASS_INFO_DICT[selected_class]
@@ -254,7 +251,7 @@ def menunode_categories(caller, **kwargs):
     for category in _APPEARANCE_DICT.keys():
         options.append(
             {
-                "desc": f"Choose your |c{category}|n",
+                "desc": f"Waehle deine |c{category}|n",
                 "goto": ("menunode_category_options", {"category": category}),
             }
         )
@@ -262,8 +259,8 @@ def menunode_categories(caller, **kwargs):
     # since this node goes in and out of sub-nodes, you need an option to proceed to the next step
     options.append(
         {
-            "key": ("(Next)", "next", "n"),
-            "desc": "Continue to the next step.",
+            "key": ("(weiter)", "w"),
+            "desc": "Weiter zum naechsten Schritt.",
             "goto": "menunode_multi_choice",
         }
     )
@@ -271,8 +268,8 @@ def menunode_categories(caller, **kwargs):
     # option
     options.append(
         {
-            "key": ("(Back)", "back", "b"),
-            "desc": "Go back to the previous step",
+            "key": ("(Zurueck)", "z"),
+            "desc": "Zurueck zum vorherrigen Schritt.",
             "goto": "menunode_info_base",
         }
     )
@@ -283,11 +280,11 @@ def menunode_category_options(caller, raw_string, category=None, **kwargs):
     """Choosing an option within the categories."""
     if not category:
         # this shouldn't have happened, so quit and retry
-        return "Something went wrong. Please try again."
+        return "Etwas ging Schief. Versuche nochmal."
 
     # for mechanics-related choices, you can combine this with the
     # informational options approach to give specific info
-    text = f"Choose your {category}:"
+    text = f"Waehle deine {category}:"
     help = f"This will define your {category}."
 
     options = []
@@ -299,7 +296,7 @@ def menunode_category_options(caller, raw_string, category=None, **kwargs):
     # always include a "back" option in case they aren't ready to pick yet
     options.append(
         {
-            "key": ("(Back)", "back", "b"),
+            "key": ("(zurueck)", "back", "z"),
             "desc": f"Don't change {category}",
             "goto": "menunode_categories",
         }
@@ -384,14 +381,14 @@ def menunode_multi_choice(caller, raw_string, **kwargs):
     if len(selected) == 3:
         options.append(
             {
-                "key": ("(Next)", "next", "n"),
+                "key": ("(weiter)", "next", "w"),
                 "desc": "Continue to the next step",
                 "goto": "menunode_choose_objects",
             }
         )
     options.append(
         {
-            "key": ("(Back)", "back", "b"),
+            "key": ("(zurueck)", "back", "z"),
             "desc": "Go back to the previous step",
             "goto": "menunode_categories",
         }
@@ -487,7 +484,7 @@ def menunode_choose_objects(caller, raw_string, **kwargs):
 
     options.append(
         {
-            "key": ("(Back)", "back", "b"),
+            "key": ("(zurueck)", "back", "z"),
             "desc": "Go back to the previous step",
             "goto": "menunode_multi_choice",
         }
@@ -582,11 +579,11 @@ def menunode_confirm_name(caller, raw_string, **kwargs):
     # since we reserved the name by assigning it, you can reference the character key
     # if you have any extra validation or normalization that changed the player's input
     # this also serves to show the player exactly what name they'll get
-    text = f"|w{char.key}|n is available! Confirm?"
+    text = f"|w{char.key}|n -> Der Name ist noch frei!"
     # let players change their mind and go back to the name choice, if they want
     options = [
-        {"key": ("Yes", "y"), "goto": "menunode_end"},
-        {"key": ("No", "n"), "goto": "menunode_choose_name"},
+        {"key": ("Ja", "j"), "goto": "menunode_end"},
+        {"key": ("Nein", "n"), "goto": "menunode_choose_name"},
     ]
     return text, options
 
@@ -606,9 +603,9 @@ def menunode_end(caller, raw_string):
     caller.new_char.attributes.remove("chargen_step")
     text = dedent(
         """
-        Congratulations!
+        Gratulations!
 
-        You have completed character creation. Enjoy the game!
+        Du hast einen neuen Character erstellt, Viel Spass im der Timepit!
     """
     )
     return text, None

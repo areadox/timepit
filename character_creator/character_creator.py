@@ -110,79 +110,6 @@ class ContribCmdCharCreate(MuxAccountCommand):
 
         EvMenu(session, _CHARGEN_MENU, startnode=startnode, cmd_on_exit=finish_char_callback)
 
-class MuxAccountLookCommand(DefaultAccount):
-    """
-    Custom parent (only) parsing for OOC looking, sets a "playable"
-    property on the command based on the parsing.
-
-    """
-
-    def parse(self):
-        """Custom parsing"""
-
-        super().parse()
-
-        playable = self.account.db._playable_characters
-        if playable is not None:
-            # clean up list if character object was deleted in between
-            if None in playable:
-                playable = [character for character in playable if character]
-                self.account.db._playable_characters = playable
-        # store playable property
-        if self.args:
-            self.playable = dict((utils.to_str(char.key.lower()), char) for char in playable).get(
-                self.args.lower(), None
-            )
-        else:
-            self.playable = playable
-
-
-# Obs - these are all intended to be stored on the Account, and as such,
-# use self.account instead of self.caller, just to be sure. Also self.msg()
-# is used to make sure returns go to the right session
-
-# note that this is inheriting from MuxAccountLookCommand,
-# and has the .playable property.
-class CmdOOCLook(DefaultAccount):
-    """
-    look while out-of-character
-
-    Usage:
-      look
-
-    Look in the ooc state.
-    """
-
-    # This is an OOC version of the look command. Since a
-    # Account doesn't have an in-game existence, there is no
-    # concept of location or "self". If we are controlling
-    # a character, pass control over to normal look.
-
-    key = "look"
-    aliases = ["l", "ls","b"]
-    locks = "cmd:all()"
-    help_category = "General"
-
-    # this is used by the parent
-    account_caller = True
-
-    def func(self):
-        """implement the ooc look command"""
-
-        if self.session.puppet:
-            # if we are puppeting, this is only reached in the case the that puppet
-            # has no look command on its own.
-            self.msg("Du kannst dich gerade nicht umschaun.")
-            return
-
-        if _AUTO_PUPPET_ON_LOGIN and _MAX_NR_CHARACTERS == 1 and self.playable:
-            # only one exists and is allowed - simplify
-            self.msg("Du bist gerade nicht in einem Character (OOC).\nBenutze |wspiele|n um das Spiel zu betreten.")
-            return
-
-        # call on-account look helper method
-        self.msg(self.account.at_look(target=self.playable, session=self.session))
-
 
 class ContribChargenAccount(DefaultAccount):
     """
@@ -244,7 +171,7 @@ class ContribChargenAccount(DefaultAccount):
         if characters:
             result.append("\n |wloesche <name>|n - loesche einen Character (kann nicht rueckgaengig gemacht werden)")
         plural = "" if len(characters) == 1 else "s"
-        result.append("\n |wspiele <character>|n - enter the game (|wooc|n to return here)")
+        result.append("\n |wspiele <character>|n - betrete das Spiel (|wooc|n kommst du hierher zurueck)")
         if is_su:
             result.append(f"\n\nVerfuegbare Character{plural} ({len(characters)}/unlimited):")
         else:
@@ -369,7 +296,7 @@ class DeuCmdIC(MuxAccountCommand):
     key = "spiele"
     # lock must be all() for different puppeted objects to access it.
     locks = "cmd:all()"
-    aliases = "puppet"
+    aliases = ["puppet", "spiel"]
     help_category = "General"
 
     # this is used by the parent
@@ -388,7 +315,7 @@ class DeuCmdIC(MuxAccountCommand):
         if not self.args:
             character_candidates = [account.db._last_puppet] if account.db._last_puppet else []
             if not character_candidates:
-                self.msg("Usage: ic <character>")
+                self.msg("Usage: spiele <character>")
                 return
         else:
             # argument given
